@@ -1,0 +1,13 @@
+salt 'MacBook-Pro-de-admin.local' cmd.run '/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate'
+
+salt 'MacBook-Pro-de-admin.local' cmd.run '/usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on'
+
+salt 'MacBook-Pro-de-admin.local' cmd.run 'rm /Applications/test.txt'
+salt-cp 'MacBook-Pro-de-admin.local' test.txt /Applications
+
+salt 'MacBook-Pro-de-admin.local' cmd.run 'cd /Applications/ && ls'
+
+salt 'MacBook-Pro-de-admin.local' cmd.run 'export HOME=/Users/admin && /Applications/update' runas=admin shell='/bin/bash'
+
+salt 'MacBook-Pro-de-admin.local' cmd.run 'open /usr/local/Caskroom/avast-security/15.7.3/Install\ Avast\ Security.pkg'
+

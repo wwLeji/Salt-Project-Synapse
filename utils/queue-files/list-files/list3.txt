@@ -1,0 +1,2 @@
+mac-m1-test
+mac-intel-test

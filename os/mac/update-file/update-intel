@@ -1,0 +1,102 @@
+#!/bin/sh
+
+declare -i global=0
+
+declare -i zoom=0
+declare -i slack=0
+declare -i firefox=0
+declare -i google_chrome=0
+declare -i avast=0
+declare -i keepassxc=0
+declare -i vscode=0
+declare -i google_drive=0
+declare -i notion=0
+
+if [ -d "/usr/local/Homebrew" ]; then
+    echo "Update..."
+else
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+fi
+
+if [ -d "/usr/local/Caskroom/zoom" ]; then
+    zoom=1
+    global=global+1
+fi
+
+if [ -d "/Applications/Slack.app" ]; then
+    slack=1
+    global=global+1
+fi
+
+if [ -d "/usr/local/Caskroom/firefox" ]; then
+    firefox=1
+    global=global+1
+fi
+
+if [ -d "/usr/local/Caskroom/google-chrome" ]; then
+    google_chrome=1
+    global=global+1
+fi
+
+if [ -d "/usr/local/Caskroom/avast-security" ]; then
+    avast=1
+    global=global+1
+fi
+
+if [ -d "/usr/local/Caskroom/keepassxc" ]; then
+    keepassxc=1
+    global=global+1
+fi
+
+if [ -d "/usr/local/Caskroom/visual-studio-code" ]; then
+    vscode=1
+    global=global+1
+fi
+
+if [ -d "/usr/local/Caskroom/google-drive" ]; then
+    google_drive=1
+    global=global+1
+fi
+
+if [ -d "/usr/local/Caskroom/notion" ]; then
+    notion=1
+    global=global+1
+fi
+
+if [ $zoom -eq 0 ]; then
+    /usr/local/bin/brew install --cask zoom
+fi
+
+if [ $slack -eq 0 ]; then
+    /usr/local/bin/brew install --cask slack
+fi
+
+if [ $firefox -eq 0 ]; then
+    /usr/local/bin/brew install --cask firefox
+fi
+
+if [ $google_chrome -eq 0 ]; then
+    /usr/local/bin/brew install --cask google-chrome
+fi
+
+if [ $avast -eq 0 ]; then
+    /usr/local/bin/brew install --cask avast-security
+fi
+
+if [ $keepassxc -eq 0 ]; then
+    /usr/local/bin/brew install --cask keepassxc
+fi
+
+if [ $vscode -eq 0 ]; then
+    /usr/local/bin/brew install --cask visual-studio-code
+fi
+
+if [ $google_drive -eq 0 ]; then
+    /usr/local/bin/brew install --cask google-drive
+fi
+
+if [ $notion -eq 0 ]; then
+    /usr/local/bin/brew install --cask notion
+fi
+
+/usr/local/bin/brew update

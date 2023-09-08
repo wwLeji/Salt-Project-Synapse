@@ -1,0 +1,6 @@
+Manual command : ls
+
+mac-m1-test : done
+
+Done.
+try 1/1
