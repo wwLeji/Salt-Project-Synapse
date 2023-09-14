@@ -98,6 +98,10 @@ The script will check if the workstations are connected, then check if the works
     - Continue updating the update file.
     - Complete the Windows version.
 
+## Link to an other project
+
+This project is the direct continuation of another: "Deploy". The latter was designed to set up a new machine, or a refurbished old one. It allows you to properly prepare a computer for use, install applications via Homebrew for Mac, and set up security. The Salt Project was also designed to keep PCs up to date. Today, it's important to use both projects, as Salt Project doesn't install Homebrew, for example, so the machine has to be prepared beforehand. Here's a link to the original [Deploy](https://github.com/wwLeji/Deploy-Synapse) project.
+
 ## Authors
 
 - [@wwLeji](https://github.com/wwLeji)
