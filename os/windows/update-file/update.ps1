@@ -1,0 +1,1 @@
+echo Y | C:\ProgramData\chocolatey\bin\choco.exe upgrade all -y --ignore-checksums

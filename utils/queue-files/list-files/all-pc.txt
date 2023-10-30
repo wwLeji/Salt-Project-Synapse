@@ -1,0 +1,11 @@
+Jules #mac-i #gna
+fedora #lin #server
+mac-bobi #mac-m #?
+mac-intel-paris #mac-i #room
+mac-intel-test #mac-i #gna
+mac-julien-m #mac-m #marketing
+mac-m1-test #mac-m #gna
+pc-jules #win #gna
+pc-mira #win #marketing
+
+

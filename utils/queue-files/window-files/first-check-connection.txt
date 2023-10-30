@@ -1,0 +1,30 @@
+First check connection
+
+Proportion of computers connected per type:
+
+- Mac : 16%
+  - Mac Intel : 33%
+  - Mac M1/M2 : 0%
+- Windows : 0%
+
+Proportion of computers connected per team:
+
+- Medical : 0%
+- Data : 0%
+- Tech : 0%
+- Infra : 0%
+- Buisness : 0%
+- Dev : 0%
+- Operations : 0%
+- Design : 0%
+- Product : 0%
+- GNA : 25%
+- Marketing : 0%
+- QA : 0%
+- QARA : 0%
+- Room : 0%
+
+List of connected computers :
+
+fedora #lin #server
+Jules #mac-i #gna

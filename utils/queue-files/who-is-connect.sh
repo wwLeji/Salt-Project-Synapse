@@ -2,9 +2,9 @@
 
 if [ $# -eq 0 ]
   then
-    sudo salt '*' test.ping > utils/queue-files/list.txt
+    sudo salt '*' test.ping > utils/queue-files/list.txt 2> /dev/null
   else
-    sudo salt -N $1 test.ping > utils/queue-files/list.txt
+    sudo salt -N $1 test.ping > utils/queue-files/list.txt 2> /dev/null
 fi
 echo "" > utils/queue-files/list-true.txt
 grep -B 1 True utils/queue-files/list.txt >> utils/queue-files/list-true.txt

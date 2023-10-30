@@ -12,95 +12,194 @@ To use this tool, a specific configuration is required. Install the Master on a 
 The connection between the master and minions is not automatic. After proper configuration of both, you'll need to accept the request from the minion to the master, directly on the master. Once connected, it's also possible (and necessary for using the scripts) to group the minions into categories such as Windows, Linux, Mac, Mac-M, Mac-Intel.
 
 Once all of this is completed, everything is ready to operate.
+
+
 ## How to use
 
-The primary goal of this project is to launch an executable that gets installed on the minions using this command for example : 
+The main aim of this project is to launch orders for minions. To achieve this, the evolution of the project has led us to the principle of queuing.
+Since this change, the main file is the start-queue file, which can be executed as follows:
+```bash
+    ./utils/queue-files/start-queue
+```
+This will launch the main program, giving us a choice of many things.
+To begin with, we'll need to choose which command to run on the minions, and we have a choice of 7.
 
 ```bash
-  ./os/mac/update/change-update-file.sh
+    Choose the task you want to execute :
+    1. Get firewall status
+    2. Enable firewall
+    3. Disable firewall
+    4. Launch update
+    5. Change update file
+    6. Manual command
+    7. First check connection
+    Enter your choice : 
 ```
 
-Here, all Mac machines in the fleet will receive an executable named "update" in their application folder. Those who already had it will simply see the file replaced by the new one. The file in question that is being deployed to the workstations is located at this address :
+The first 3 are self-explanatory, so I don't need to explain them. Next comes the "Launch update" choice, which allows you to launch a small program called "update", located directly on the target machines. Choice 5 lets us modify this update file, adding tasks, applications to be updated or installed. Choice 6 is equally straightforward, allowing you to execute custom commands. And the last one gives us an overview of the number of machines available and connected, and therefore able to receive a task.
+
+
+The second choice (if you didn't take 7) looks like this:
+```bash
+    Choose all tags needed or one tag needed :
+    1. All tags needed
+    2. One tag needed
+    3. One PC only choosed by name
+    Enter your choice : 
+```
+
+This will determine how the minion selection works. Here, we're using tags to choose, and we'll decide whether to select only those machines that contain all the tags we've given, or only those machines that contain at least one of the given tags.
+The third option allows us not to use tags, but to select a machine directly by name.
+
+Next comes the choice of tags, where you have to enter the desired tags by hand.
 
 ```bash
-  /os/mac/update-file/update-m
-  /os/mac/update-file/update-intel
+    Choose tags to search for :
+    Enter your choice : 
 ```
 
-There is a file for Mac M-series and another for Mac Intel.
- 
-Now that the computers are equipped with the file, we can launch the updates using the command :
+Here the answer might look something like this
 
 ```bash
-  ./os/mac/update/update-all.sh
+    Enter your choice : #mac-m #dev
 ```
+The number of tags chosen is unlimited
 
-From this point onward, the affected machines (Mac) will launch the file in the background. In this case, the file is responsible for performing updates on applications and installing any missing ones. Of course, the file can be adjusted and modified to carry out the full range of tasks that a shell script can execute.
- 
- 
-There's also another feature that allows you to check the status of the firewall. To do this, simply enter this command :
+Once the tags have been entered, the program informs us of the number of minions selected thanks to the tags.
 
 ```bash
-  ./os/mac/firewall/firewall-status.sh
+    5 PC found
+    Check #list.txt for more details
 ```
-Of course, it's also possible to activate the firewall across the entire fleet:
+
+You'll then need to set the number of repetitions you want, or the commands will attempt to run. 
+```bash
+    Choose the maximum number of retries :
+    Enter your choice : 
+```
+
+The program will stop if all commands have been executed successfully, but in the meantime, the launch loop will run X times.
+
+Then comes the last option to be entered, which is the waiting time between each attempt. 
+```bash
+    Choose the waiting time between each retry :
+    Enter your choice : 
+```
+It's a value in seconds, so you don't have to keep launching ping tests.
+
+
+Then the program begins its work, which can be seen in a window that opens automatically.
+
+This window is updated as the program runs, showing us the progress of tasks, and looks like this
 
 ```bash
-  ./os/mac/firewall/firewall-enable.sh
-```
- 
- 
-### Flag and logs
+    Firewall status :
 
-You may have noticed, but no information is provided to you after the execution of the scripts. However, they do indeed exist and are all stored in the logs folder :
+    mac-bobi: not connected
+    mac-julien-m : not connected
+    mac-intel-test : not connected
+    mac-m1-test : not connected
+    mac-intel-paris : not connected
+
+    Loading...
+    try 1/10
+    Estimated time : 250 seconds
+```
+
+At the top is the name of the current Task, followed by the names of the minions involved, with a status for each of them. At first, they're not connected, then the first loop advances, and if possible, unlocked machines on the network become connected:
 
 ```bash
-  /os/mac/logs/
+    Firewall status :
+
+    mac-bobi: not connected
+    mac-julien-m: connected
+    mac-intel-test : connected
+    mac-m1-test : not connected
+    mac-intel-paris : connected
+
+    Loading...
+    try 1/10
+    Estimated time : 250 seconds
 ```
 
-Everything is sorted and categorized here, named according to the performed task, date, and time.
- 
-But it's also possible to view these results in the terminal after executing a script by simply adding the "-l" flag, like this for example:
+Then, the executions are launched on the available, connected machines. And if everything's working, the status changes to "done".
+
 
 ```bash
-  ./os/mac/firewall/firewall-status.sh -l
+    Firewall status :
+
+    mac-bobi: not connected
+    mac-julien-m: done
+    mac-intel-test : done
+    mac-m1-test : not connected
+    mac-intel-paris : done
+
+    Loading...
+    try 1/10
+    Estimated time : 250 seconds
 ```
 
-## Update :
+With this window, you can also interact with the program in progress, such as quitting the process entirely, or pausing it before starting the next loop. You can also display logs in this window, to see the output of machines that have already received the command. Finally, you can toggle full screen on and off, and zoom in and out.
 
-### Queue
+So, for each loop, the program tries to see which machines are connected, then tries to run the commands on those that are connected, and which have not yet succeeded in executing the commands. This system avoids spamming machines that have already received their commands.
 
-A problem arose for all those who had already done so: tasks performed on locked or simply switched-off machines were not carried out. A simple error message indicated this. To solve this problem, there's now another way to launch tasks.
-Using the command
+
+### Logs
+
+You may have noticed during program use that the information following execution is not transcribed to the classic output. All necessary information is stored in an orderly fashion in the logs folder:
 ```bash
-  ./utils/queue-files/start-queue.sh
+    /utils/queue-files/logs
 ```
-You are now able to launch a "queue".
-First, you'll be asked to choose which task to run. You can make your choice using numbers, such as 1, 2, 3, etc., then enter.
-Next, you'll need to select the list, previously edited, in the :
+
+### Args
+
+The program can also be launched with arguments, which will allow you to launch it directly with the desired options. The arguments are as follows:
+
 ```bash
-  /utils/queue-files/list-files
-```
-This is the list containing the machines on which the tasks will run. You can edit them, for example, one containing all Macs, or one containing all computers in a workgroup.
-Next, you'll need to determine the number of tries the program will make before stopping (it will stop before stopping if all commands have succeeded).
-And finally, you'll need to choose the number of seconds to wait between each trial.
+    -h                      Show help message
 
-To view the script's work in real time, open :
+    -cmd                    Set the command to execute
+
+        =gf                 Get firewall status
+        =ef                 Enable firewall
+        =df                 Disable firewall
+        =lu                 Launch update
+        =cu                 Change update file
+        =mc                 Manual command
+        =cc                 First check connection
+    
+    -tagoption              Set the tag option
+
+        =at                 All tags needed
+        =ot                 One tag needed
+        =n                  On PC only choosed by name
+
+    -tags                   Set the tags if needed (if tagoption=at or ot)
+
+        ="#tag1,#tag2..."   Tags separated by commas
+    
+    -pc                     Set the PC name if needed (if tagoption=n)
+
+        ="name"             Name of the PC
+
+    -retries                Set the number of retries
+
+        ="number"           Numeber of retries
+
+    -wait                   Set the waiting time between each retry
+
+        ="number"           Time between each retries in seconds
+```
+
+An example of this command can be :
+
 ```bash
-  utils/queue-files/loading.txt
+    ./utils/queue-files/start-queue -cmd=ef -tagoption=ot -tags=#mac-m,#dev -retries=50 -wait=120
 ```
-
-The script will check if the workstations are connected, then check if the workstations have already received the command with successful execution, and finally attempt to launch the task on the connected machines, which did not execute the command correctly. Then wait S seconds, and try again, until the maximum number of attempts has been reached, or all tasks have been successfully executed.
-
 
 ## Work In Progress
 
-    - Continue updating the update file.
-    - Complete the Windows version.
-
-## Link to an other project
-
-This project is the direct continuation of another: "Deploy". The latter was designed to set up a new machine, or a refurbished old one. It allows you to properly prepare a computer for use, install applications via Homebrew for Mac, and set up security. The Salt Project was also designed to keep PCs up to date. Today, it's important to use both projects, as Salt Project doesn't install Homebrew, for example, so the machine has to be prepared beforehand. Here's a link to the original [Deploy](https://github.com/wwLeji/Deploy-Synapse) project.
+    - Setup on Server
 
 ## Authors
 

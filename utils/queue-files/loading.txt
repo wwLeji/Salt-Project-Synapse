@@ -1,6 +1,7 @@
-Manual command : ls
+Firewall disabled
 
-mac-m1-test : done
+mac-intel-test : not connected
+Jules : done
 
-Done.
-try 1/1
+Error.
+try 2/2
